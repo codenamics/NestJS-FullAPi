@@ -6,9 +6,11 @@ import {
   Delete,
   Body,
   Param,
+  UsePipes,
 } from '@nestjs/common';
 import { IdeaService } from './idea.service';
 import { IdeaDTO } from './idea.dto';
+import { ValidationPipe } from '../shared/validation.pipe';
 
 @Controller('idea')
 export class IdeaController {
@@ -18,6 +20,7 @@ export class IdeaController {
     return await this.ideaService.showAll();
   }
   @Post()
+  @UsePipes(new ValidationPipe())
   async createIdea(@Body() data: IdeaDTO) {
     return await this.ideaService.create(data);
   }
@@ -26,6 +29,7 @@ export class IdeaController {
     return this.ideaService.read(id);
   }
   @Put(':id')
+  @UsePipes(new ValidationPipe())
   async updateIdea(@Param('id') id: string, @Body() data: Partial<IdeaDTO>) {
     return await this.ideaService.update(id, data);
   }
